@@ -6,10 +6,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial- scale=1.0">
     <link rel="stylesheet" type="text/css" href="main.css" />
+    <!-- Bootsrap CSS 
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        -->
+    <!-- LESS основний файл -->
+    <link rel="stylesheet/less" type="text/css" href="assets/less/main.less" />
+    <!-- LESS JavaScript компілятор -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>
 </head>
 
 <body class="body">
-
     <header class="header">
         <section class="emblem">
             <article class="emblem-text-place">
@@ -37,23 +43,23 @@
         </section>
     </header>
     <main class="main-body">
-        <section>
+        <section class="main-caption-panel">
             <span class="caption">
-                Усі піци
-                <span class="amount-line">8</span>
+                Усі піци 
+                <span class="number-pizza">8</span>
             </span>
         </section>
         <section class="kinds">
-            <button class="pizza-kind-chosen">Усі</button>
-            <button class="pizza-kind">М'ясні</button>
-            <button class="pizza-kind">З ананасами</button>
-            <button class="pizza-kind">З грибами</button>
-            <button class="pizza-kind">З морепродуктами</button>
-            <button class="pizza-kind">Вега</button>
+            <button class="pizza-kind" id="all">Усі</button>
+            <button class="pizza-kind" id="meat">М'ясні</button>
+            <button class="pizza-kind" id="pineapple">З ананасами</button>
+            <button class="pizza-kind" id="mushroom">З грибами</button>
+            <button class="pizza-kind" id="ocean">З морепродуктами</button>
+            <button class="pizza-kind" id="vega">Вега</button>
         </section>
 
         <section class="all-pizza">
-            <section class="pizza">
+            <!--   <section class="pizza">
                 <span class="addition">Нова</span>
                 <img class="pizza-photo" src="assets/images/pizza_7.jpg" alt="pizza-impreza">
                 <section class="main-info">
@@ -387,7 +393,7 @@
                         <button class="buy buy-button">Купити</button>
                     </section>
                 </section>
-            </section>
+            </section>-->
         </section>
     </main>
 
@@ -396,12 +402,13 @@
         <section class="order-panel">
             <span class="order-text">
                 Замовлення
-                <span class="amount-line">3</span>
+                <span class="amount-line order">0</span>
             </span>
-            <span class="clean-order">Очистити замовлення</span>
+            <button class="clean-order">Очистити замовлення</button>
         </section>
 
         <section class="order-panel-pizza">
+            <!--
             <section class="pizza-info">
                 <section class="order-pizza">
                     <section class="order-small-section">
@@ -463,7 +470,7 @@
                     </section>
                     <section class="order-small-section">
                         <img class="size-icon" src="assets/images/size-icon.svg" alt="size-icon">
-                        <span class="order-number">40</span>
+                        <span class="order-number size">40</span>
                         <img class="weight" src="assets/images/weight.svg" alt="weight">
                         <span class="order-number">780</span>
                     </section>
@@ -481,13 +488,13 @@
                     <img class="order-pizza-icon" src="assets/images/pizza_1.png" alt="pizza-polo-big">
 
                 </section>
-            </section>
+            </section>-->
         </section>
 
         <section class="total-panel">
             <section class="sum">
                 <span class="sum-text">Сума замовлення</span>
-                <span class="sum-amount">924 грн</span>
+                <span class="sum-amount">0 грн</span>
             </section>
             <button class="buy">Замовити</button>
         </section>
@@ -497,13 +504,22 @@
         <p>Pizza.22 - практичний проєкт в межах курсу JavaScript в Києво-Могилянський Академії</p>
         <p>Доставка піци не здійснюється</p>
     </footer>
-    
+
     <section class="badge">
         <img class="emblem-img-down" src="assets/images/discount.svg" alt="emblem">
-		<p class="badge-content">ЦЬОГО ТИЖНЯ НА ВСЕ</p>
-		<p class="badge-content">20%</p>
-	</section>
-</setion>
+        <p class="badge-content">ЦЬОГО ТИЖНЯ НА ВСЕ</p>
+        <p class="badge-content">20%</p>
+    </section>
+    </setion>
+
+    <!-- jQuery JavaScript -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"> </script>
+
+    <!--Bootsrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <!--Own JavaScript -->
+    <script type="module" src="\Frontend\src\main.js"></script>
 </body>
 
 </html>
