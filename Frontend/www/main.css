@@ -200,6 +200,9 @@
 .order-amount{
     font-weight: bold;
 }
+.order-price{
+min-width: 48px;
+}
 
 .add-amount,
 .minus-amount,

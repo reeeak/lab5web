@@ -1,25 +1,59 @@
-/**
- * Created by chaika on 25.01.16.
- */
 import pizza_info from './Pizza_List.js';
+
 let alreadyAdded = JSON.parse(localStorage.getItem('alreadyAdded'));
+
 const pizzaContainer = document.querySelector('.all-pizza');
 const amountLine = document.querySelector('.amount-line.order');
 const pizzaCartItem = document.querySelector('.order-panel-pizza');
 const captionType = document.querySelector('.caption');
 const captionNumber = document.querySelector('.number-pizza');
-$(function() {
+
+document.addEventListener('DOMContentLoaded', function() {
+  restoreProductList();
   let pizzaCount = 0;
+
+  renderPizzas('all');
+  const allButton = document.getElementById('all');
+  allButton.classList.add('pizza-kind-chosen');
+
+  const pizzaKindButtons = document.querySelectorAll('.pizza-kind');
+  pizzaKindButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const category = this.id;
+      pizzaKindButtons.forEach(button => button.classList.remove('pizza-kind-chosen'));
+      this.classList.add('pizza-kind-chosen');
+      const buttonTitle = this.textContent;
+      renderPizzas(category);
+      if (buttonTitle === 'Усі') {
+        captionType.textContent = 'Усі піци';
+      } else {
+        captionType.textContent = buttonTitle;
+      }
+      captionType.appendChild(captionNumber);
+    });
+  });
+
+  function hasCategory(pizza, category) {
+    if (category === 'vega' && pizza.type.includes('Вега піца')) {
+      return true; 
+    } else {
+      for (const key in pizza.content) {
+        if (pizza.content.hasOwnProperty(key) && key === category) {
+          return true;
+        }
+      }
+      return false;
+    }
+  }
+  
+
 function renderPizzas(category) {
-  pizzaContainer.innerHTML = ''; // очистити контейнер піц
+  pizzaContainer.innerHTML = ''; 
   pizzaCount = 0;
   pizza_info.forEach((pizza) => {
-    console.log(category);
     if (category === 'all' || hasCategory(pizza, category)) {
-    
     const pizzaSection = document.createElement('section');
     pizzaSection.className = 'pizza';
-  
     if(pizza.is_new){
       const pizzaNew = document.createElement('span');
       pizzaNew.className = 'addition';
@@ -27,7 +61,6 @@ function renderPizzas(category) {
       if(pizza.is_popular)  pizzaNew.style.transform = 'translate(220px, 20px)';
       pizzaSection.appendChild(pizzaNew);
     }
-
     if(pizza.is_popular){
       const pizzaPopular = document.createElement('span');
       pizzaPopular.className = 'addition popular';
@@ -110,7 +143,7 @@ function renderPizzas(category) {
     buyButton.className = 'buy buy-button';
     buyButton.textContent = 'Купити';
     buyButton.addEventListener('click', () => {
-        const selectedSize = 'small_size'; // Отримайте обраний розмір піци
+        const selectedSize = 'small_size'; 
         addToCart(pizza, selectedSize, pizza.small_size.price);
       });
   
@@ -167,7 +200,7 @@ bigSizeParam.appendChild(bigSizeOrderNumber2);
     bigBuyButton.className = 'buy buy-button';
     bigBuyButton.textContent = 'Купити';
     bigBuyButton.addEventListener('click', () => {
-        const selectedSize = 'big_size'; // Отримайте обраний розмір піци
+        const selectedSize = 'big_size'; 
         addToCart(pizza, selectedSize, pizza.big_size.price);
       });
   
@@ -179,9 +212,6 @@ bigSizeParam.appendChild(bigSizeOrderNumber2);
     bigSection.appendChild(bigBuyButton);
     bottomPanelSection.appendChild(bigSection);
   }
- //   bottomPanelSection.appendChild(smallSection);
-  //  bottomPanelSection.appendChild(bigSection);
-  
     pizzaSection.appendChild(pizzaImage);
     pizzaSection.appendChild(mainInfoSection);
     pizzaSection.appendChild(bottomPanelSection);
@@ -193,86 +223,36 @@ bigSizeParam.appendChild(bigSizeOrderNumber2);
   }
 });
 captionNumber.textContent = pizzaCount;
-
 }
-
-function hasCategory(pizza, category) {
-  if (category === 'vega') {
-    // Перевіряємо, чи піца не містить продукту "meat"
-    return pizza.type.includes('Вега піца');
-
-  } else {
-    // Перевіряємо, чи піца містить вказану категорію
-    for (const key in pizza.content) {
-      if (pizza.content.hasOwnProperty(key) && key === category) {
-        return true;
-      }
-    }
-    return false;
-  }
-}
-
-
-
-// Обробник кліку на кнопку категорії
-$('.pizza-kind').on('click', function() {
-  const category = $(this).attr('id');
-  $('.pizza-kind').removeClass('pizza-kind-chosen');
-  $(this).addClass('pizza-kind-chosen');
-  const buttonTitle = $(this).text();
-  renderPizzas(category);
-  captionType.textContent = buttonTitle;
-  if (buttonTitle === 'Усі') {
-    captionType.textContent = 'Усі піци';
-  } else {
-    captionType.textContent = buttonTitle;
-    
-  }
-  captionType.appendChild(captionNumber);
-  console.log(pizzaCount);
 });
 
-// Початкове відображення усіх піц
-renderPizzas('all');
-$('#all').addClass('pizza-kind-chosen');
-});
 
-// Функція додавання піци до кошика
 function addToCart(pizzaName, size, price) {
-  console.log(alreadyAdded);
   const existingPizza = findPizzaInCart(pizzaName, size);
-  console.log(alreadyAdded);
   if (existingPizza) {
     existingPizza.quantity += 1;
     const orderAmount = existingPizza.element.querySelector('.order-amount');
     orderAmount.textContent = existingPizza.quantity.toString();
-
   } else {
     const pizzaCartItemOne = createPizzaCartItem(pizzaName, size);
     alreadyAdded.push({ name: pizzaName, size: size, quantity: 1, price: price, element: pizzaCartItemOne });
     console.log(alreadyAdded);
     pizzaCartItem.appendChild(pizzaCartItemOne);
   }
-
-  saveProductList(); // Зберегти дані у локальному сховищі
+  saveProductList(); 
 }
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  restoreProductList();
-});
   
   function findPizzaInCart(pizzaName, size) {
     for (let i = 0; i < alreadyAdded.length; i++) {
       const pizza = alreadyAdded[i];
       if (pizza.name.id === pizzaName.id && pizza.size === size ) {
-
         return pizza;
       }
     }
     return null;
   }
-  // Функція створення елемента піци в кошику з врахуванням розміру
+ 
+
   function createPizzaCartItem(pizza, size) {
     
     const pizzaInfoSection = document.createElement('section');
@@ -289,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let sizeStr = '';
     if(size=="small_size") sizeStr=" (Мала)";
     else sizeStr=" (Велика)";
-    orderPizzaName.textContent = `${pizza.title}`+ sizeStr;
+    orderPizzaName.textContent = pizza.title + sizeStr;
     orderSmallSection.appendChild(orderPizzaName);
     
     const orderSmallSection2 = document.createElement('section');
@@ -322,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const orderPrice = document.createElement('span');
     orderPrice.className = 'order-price';
-    orderPrice.textContent = `${pizza[size].price}грн`;
+    orderPrice.textContent = pizza[size].price + 'грн';
     orderSmallSection3.appendChild(orderPrice);
     
     const numberSection = document.createElement('section');
@@ -371,23 +351,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const orderPizzaIcon = document.createElement('img');
     orderPizzaIcon.className = 'order-pizza-icon';
-    orderPizzaIcon.src = `${pizza.icon_png}`;
+    orderPizzaIcon.src = pizza.icon_png;
     orderPizzaIcon.alt = 'pizza';
     sectionImg.appendChild(orderPizzaIcon);
     pizzaInfoSection.appendChild(sectionImg);
-
-  
     return pizzaInfoSection;
-  }
-
-  function removeFromCart(pizzaName, size) {
-    const index = alreadyAdded.findIndex(
-      (pizza) => pizza.name.id === pizzaName.id && pizza.size === size
-    );
-  
-    if (index !== -1) {
-      alreadyAdded.splice(index, 1);
-    }saveProductList();
   }
 
   function increaseQuantity(pizza, size) {
@@ -407,8 +375,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     saveProductList();
   }
-const panelPrice= document.querySelector('.sum-amount');// Збереження даних кошика
 
+  function removeFromCart(pizzaName, size) {
+    const index = alreadyAdded.findIndex(pizza => pizza.name.id === pizzaName.id && pizza.size === size);
+      alreadyAdded.splice(index, 1);
+      saveProductList();
+  }
+
+const panelPrice= document.querySelector('.sum-amount');
 
 function saveProductList() {
   localStorage.setItem('cartItems', JSON.stringify(alreadyAdded));
@@ -419,41 +393,30 @@ function amount(){
   let totalPrice = 0;
 
   alreadyAdded.forEach((pizza) => {
-    let price = pizza.price; // Отримати ціну піци
-    let quantity = pizza.quantity; // Отримати кількість піц
-    console.log(pizza.quantity, pizza.price);
-    totalPrice += price * quantity; // Обчислити загальну ціну піц
+    let price = pizza.price; 
+    let quantity = pizza.quantity; 
+    totalPrice += price * quantity; 
   });
-panelPrice.textContent = totalPrice.toString()+ " грн";
+panelPrice.textContent = totalPrice.toString()+ ' грн';
 amountLine.textContent = alreadyAdded.length;
 }
 
-// Відновлення даних кошика
+
 function restoreProductList() {
   const savedCartItems = localStorage.getItem('cartItems');
-  if (savedCartItems) {
     alreadyAdded = JSON.parse(savedCartItems);
-
-    // Відновлення кількості піц на сторінці
     alreadyAdded.forEach((pizza) => {
       const pizzaCartItemOne = createPizzaCartItem(pizza.name, pizza.size);
       pizzaCartItemOne.querySelector('.order-amount').textContent = pizza.quantity.toString();
-      pizza.element = pizzaCartItemOne; // Збереження посилання на новий створений елемент
+      pizza.element = pizzaCartItemOne; 
       pizzaCartItem.appendChild(pizzaCartItemOne);
       amount();
-    });
-  }
+  });
 }
 
-// Очищення кошика
-function clearCart() {
-  pizzaCartItem.innerHTML = ''; // Очищення елементів кошика
-  alreadyAdded = [];
-  saveProductList(); // Очищення даних кошика
-}
-
-// Видалення кошика при кліку на кнопку "Очистити"
 const clearButton = document.querySelector('.clean-order');
 clearButton.addEventListener('click', () => {
-  clearCart();
+  pizzaCartItem.innerHTML = ''; 
+  alreadyAdded = [];
+  saveProductList(); 
 });
