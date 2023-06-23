@@ -218,11 +218,11 @@ bigSizeParam.appendChild(bigSizeOrderNumber2);
   
     pizzaContainer.appendChild(pizzaSection);
     pizzaCount++;
-    captionNumber.textContent = pizzaCount.toString();
+    captionNumber.textContent = pizzaCount;
     
   }
 });
-captionNumber.textContent = pizzaCount;
+
 }
 });
 
@@ -232,7 +232,7 @@ function addToCart(pizzaName, size, price) {
   if (existingPizza) {
     existingPizza.quantity += 1;
     const orderAmount = existingPizza.element.querySelector('.order-amount');
-    orderAmount.textContent = existingPizza.quantity.toString();
+    orderAmount.textContent = existingPizza.quantity;
   } else {
     const pizzaCartItemOne = createPizzaCartItem(pizzaName, size);
     alreadyAdded.push({ name: pizzaName, size: size, quantity: 1, price: price, element: pizzaCartItemOne });
